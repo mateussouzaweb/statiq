@@ -8,7 +8,7 @@ In production, this project aims to be used behind a reverse proxy (like *traefi
 
 ## Features
 
-- Written in Go Language.
+- Written in Go Language
 - Based on ``labstack/echo`` project - <https://echo.labstack.com/>
 - Includes Logs, Recovery, Request ID and CORS
 - Contains basic security features like XSS, Content Type Sniffing, X-Frame Options, ...
@@ -26,13 +26,13 @@ To install, just download the binary file and place it on the binaries folder:
 sudo wget https://raw.githubusercontent.com/mateussouzaweb/statiq/master/bin/statiq -O /usr/local/bin/statiq && sudo chmod +x /usr/local/bin/statiq
 ```
 
-To check command flags use:
+To check command flags, use:
 
 ```bash
 statiq --help
 ```
 
-To start the server use:
+To start the server, run:
 
 ```bash
 statiq --port 8080 --root /path/to/root/server/
