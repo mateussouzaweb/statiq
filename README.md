@@ -29,7 +29,7 @@ sudo wget https://raw.githubusercontent.com/mateussouzaweb/statiq/master/bin/sta
 To check command flags use:
 
 ```bash
-statiq -help
+statiq --help
 ```
 
 To start the server use:
