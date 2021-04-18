@@ -11,41 +11,61 @@ import (
 
 func main() {
 
+	config := Config{
+		Port:  8080,
+		Root:  "/var/www/",
+		Index: "index.html",
+		HTML5: true,
+	}
+
 	// Command line flags
-	portFlag := flag.Int64("port", 8080, "Port to the server")
-	rootFlag := flag.String("root", "/var/www/", "Root folder where the files are")
+	flag.Int64Var(
+		&config.Port,
+		"port",
+		config.Port,
+		"Port to the server",
+	)
+	flag.StringVar(
+		&config.Root,
+		"root",
+		config.Root,
+		"Root folder where the files are",
+	)
 
 	// Parse values
+	version := flag.Bool("version", false, "Print program version")
 	flag.Parse()
 
+	if *version {
+		fmt.Println("STATIQ version 0.0.1")
+		return
+	}
+
 	// Basic validation
-	if *portFlag < 1 {
+	if config.Port < 1 {
 		log.Fatal("ERROR: Missing port flag")
 	}
 
-	if *rootFlag == "" {
+	if config.Root == "" {
 		log.Fatal("ERROR: Missing root path")
 	}
 
 	// Create server
 	e := echo.New()
 
+	// Default middlewares
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
 	e.Use(middleware.RequestID())
-	e.Use(middleware.Secure())
+	e.Use(middleware.CORS())
 	e.Use(middleware.Gzip())
 
 	// Static files + SPA rewrite
-	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:  *rootFlag,
-		HTML5: true,
-	}))
+	e.Use(filesMiddleware(&config))
 
 	// Start server
-	port := fmt.Sprintf(":%d", *portFlag)
+	port := fmt.Sprintf(":%d", config.Port)
 	err := e.Start(port)
 
 	if err != nil {
