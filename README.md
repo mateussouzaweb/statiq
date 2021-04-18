@@ -11,10 +11,11 @@ In production, this project aims to be used behind a reverse proxy (like *traefi
 - Written in Go Language
 - Based on ``labstack/echo`` project - <https://echo.labstack.com/>
 - Includes Logs, Recovery, Request ID and CORS
-- Contains basic security features like XSS, Content Type Sniffing, X-Frame Options, ...
-- Auto rewrite to SPA project
-- Auto remove trailing slash
+- Contains security features like XSS, Content Type Sniffing, Content Security Policy, ...
+- Auto rewrite for SPA projects
+- Auto removes trailing slash
 - Gzip enabled
+- Optimized caching
 
 ---
 
