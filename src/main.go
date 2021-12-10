@@ -37,7 +37,7 @@ func main() {
 	flag.Parse()
 
 	if *version {
-		fmt.Println("STATIQ version 0.0.1")
+		fmt.Println("STATIQ version 0.0.2")
 		return
 	}
 
