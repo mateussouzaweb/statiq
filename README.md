@@ -4,7 +4,7 @@
 
 In production, this project aims to be used behind a reverse proxy (like *traefik*, *cloudflare*, ...), where you will handle advanced configurations like HTTPS, HTTP Auth, ACL, and more.
 
----
+----
 
 ## Features
 
@@ -17,14 +17,16 @@ In production, this project aims to be used behind a reverse proxy (like *traefi
 - Gzip enabled
 - Optimized caching
 
----
+----
 
 ## Installation and Usage
 
 To install, just download the binary file and place it on the binaries folder:
 
 ```bash
-sudo wget https://raw.githubusercontent.com/mateussouzaweb/statiq/master/bin/statiq -O /usr/local/bin/statiq && sudo chmod +x /usr/local/bin/statiq
+REPOSITORY="https://github.com/mateussouzaweb/statiq/releases/download/latest"
+sudo wget $REPOSITORY/statiq -O /usr/local/bin/statiq
+sudo chmod +x /usr/local/bin/statiq
 ```
 
 To check command flags, use:
