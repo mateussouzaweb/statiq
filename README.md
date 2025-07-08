@@ -42,3 +42,32 @@ statiq --port 8080 --root /path/to/root/server/
 ```
 
 Kill the process when you need and that is it!
+
+## Usage with Docker
+
+Here is a sample ``Dockerfile`` that you can use to build a container image with *statiq* in your project:
+
+```Dockerfile
+FROM alpine:latest
+
+# Install dependencies
+RUN apk --no-cache add wget ca-certificates gcompat
+
+# Install statiq
+RUN REPOSITORY="https://github.com/mateussouzaweb/statiq/releases/download/latest" && \
+    wget $REPOSITORY/statiq -O /bin/statiq && chmod +x /bin/statiq
+
+# Create site directory
+WORKDIR /site
+
+# Copy project static files to container
+# You can also perform specific build process here
+COPY ./dist ./
+
+# Expose port
+EXPOSE 8080
+
+# Run program
+CMD ["/bin/statiq", "--port", "8080", "--root", "/site"]
+```
+
