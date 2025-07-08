@@ -15,7 +15,7 @@ func main() {
 		Port:  8080,
 		Root:  "/var/www/",
 		Index: "index.html",
-		HTML5: true,
+		SPA:   true,
 	}
 
 	// Command line flags
@@ -62,7 +62,7 @@ func main() {
 	e.Use(middleware.Gzip())
 
 	// Static files + SPA rewrite
-	e.Use(filesMiddleware(&config))
+	e.Use(FilesMiddleware(&config))
 
 	// Start server
 	port := fmt.Sprintf(":%d", config.Port)

@@ -14,11 +14,11 @@ type Config struct {
 	Port  int64
 	Root  string
 	Index string
-	HTML5 bool
+	SPA   bool
 }
 
-// filesMiddleware handle file server
-func filesMiddleware(config *Config) echo.MiddlewareFunc {
+// FilesMiddleware handle file server
+func FilesMiddleware(config *Config) echo.MiddlewareFunc {
 
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
@@ -31,27 +31,28 @@ func filesMiddleware(config *Config) echo.MiddlewareFunc {
 			}
 
 			// Determine resource
-			name := filepath.Join(config.Root, filepath.Clean("/"+p)) // "/"+ for security
+			// Append "/" + for security reasons
+			name := filepath.Join(config.Root, filepath.Clean("/"+p))
 			isHTML := strings.Contains(p, ".htm")
-
-			fi, err := os.Stat(name)
+			fileInfo, err := os.Stat(name)
 
 			if err != nil {
 
-				if os.IsNotExist(err) && config.HTML5 {
+				// On SPA model, rewrite to index page
+				if os.IsNotExist(err) && config.SPA {
 					name = filepath.Join(config.Root, config.Index)
 					isHTML = true
 				} else {
 					return err
 				}
 
-			} else if fi.IsDir() {
+			} else if fileInfo.IsDir() {
 
+				// If it's a directory, append index file and check if it exists
 				name = filepath.Join(name, config.Index)
 				isHTML = true
 
 				_, err = os.Stat(name)
-
 				if err != nil {
 					if os.IsNotExist(err) {
 						return next(c)
@@ -61,7 +62,7 @@ func filesMiddleware(config *Config) echo.MiddlewareFunc {
 
 			}
 
-			// Security headers
+			// Add security headers
 			c.Response().Header().Set(
 				echo.HeaderXContentTypeOptions,
 				"nosniff",
@@ -78,7 +79,7 @@ func filesMiddleware(config *Config) echo.MiddlewareFunc {
 				)
 			}
 
-			// Mimetypes && UTF-8 header
+			// Set Mimetype && UTF-8 header
 			for format, mime := range mimes {
 				if strings.HasSuffix(name, format) {
 					c.Response().Header().Set(
@@ -89,7 +90,7 @@ func filesMiddleware(config *Config) echo.MiddlewareFunc {
 				}
 			}
 
-			// Cache control
+			// Set cache control
 			if !isHTML {
 				c.Response().Header().Set(
 					"Cache-Control",
